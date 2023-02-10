@@ -9,9 +9,9 @@ pub enum Cell {
 }
 
 pub struct Puzzle {
-    array: Vec<Cell>,
-    row_clues: Vec<Vec<usize>>,
-    column_clues: Vec<Vec<usize>>,
+    pub array: Vec<Cell>,
+    pub row_clues: Vec<Vec<usize>>,
+    pub column_clues: Vec<Vec<usize>>,
 }
 
 impl Puzzle {
