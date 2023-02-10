@@ -63,12 +63,13 @@ impl Puzzle {
                     .array
                     .iter_mut()
                     .enumerate()
-                    .filter(|(i, _)| y * width <= *i || *i <= y * width + width)
+                    .filter(|(i, _)| y * width <= *i && *i < y * width + width)
                     .map(|(_, e)| e)
                     .collect();
                 let clues = &self.row_clues[y];
 
-                change_made = solve_line(cells, clues);
+                // The functions called here are defined below
+                change_made = mathematical_approach(cells, clues);
             }
             // for each column
             for x in 0..width {
@@ -83,16 +84,17 @@ impl Puzzle {
                     .collect();
                 let clues = &self.column_clues[x];
 
-                change_made = solve_line(cells, clues);
+                // The functions called here are defined below
+                change_made = mathematical_approach(cells, clues);
             }
         }
+
         // Solves given cells using given clues. true if at least one cell is changed, false otherwise
-        fn solve_line(mut cells: Vec<&mut Cell>, clues: &Vec<usize>) -> bool {
+        fn mathematical_approach(mut cells: Vec<&mut Cell>, clues: &Vec<usize>) -> bool {
             let mut change_made = false;
             // Mathematical Approach
             // https://en.wikipedia.org/wiki/Nonogram#Mathematical_approach
 
-            // if all cells are empty in current line, check with Mathematical Approach
             /* wish this worked instead! only checking empty rows for now.
             match cells[..] {
                 [Cell::Crossed.., Cell::Empty.., Cell::Crossed..] => {}
@@ -100,11 +102,11 @@ impl Puzzle {
             */
             if cells.iter().all(|cell| cell == &&mut Cell::Empty) {
                 // calculate minimum number of cells needed to fulfill clues
-                let mut clue_space = clues.len() - 1;
+                let mut clues_space = clues.len() - 1;
                 for clue in clues {
-                    clue_space += *clue
+                    clues_space += *clue
                 }
-                let min_clue_size = cells.len() - clue_space;
+                let min_clue_size = cells.len() - clues_space;
                 // any clues bigger than backfill_distance will have cells filled
                 for (i, clue) in clues.iter().enumerate() {
                     if clue > &min_clue_size {
@@ -364,41 +366,10 @@ mod tests {
         p.push_clues_column(vec![1, 2]);
         p.push_clues_column(vec![1]);
 
-        let solution = Puzzle {
-            array: vec![
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Empty,
-                Cell::Filled,
-                Cell::Filled,
-                Cell::Filled,
-                Cell::Empty,
-            ],
-            row_clues: vec![vec![1, 1], vec![1, 1], vec![0], vec![1, 1], vec![3]],
-            column_clues: vec![vec![1], vec![2, 1], vec![1], vec![2, 1], vec![1]],
-        };
-
         // [Empty, Empty, Filled, Filled, Filled, Filled, Empty, Empty, Empty, Empty, Empty, Empty, Filled, Empty, Empty]
         println!("{}", p);
-        println!("{}", solution);
+        p.solve();
+        println!("{}", p);
         assert!(false);
     }
 
@@ -462,7 +433,7 @@ mod tests {
         assert_eq!(p.array.len(), 25);
     }
 
-    //#[test]
+    #[test]
     fn test_solver() {
         let mut p = Puzzle::new();
         p.push_clues_row(vec![1, 1]);
