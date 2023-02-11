@@ -27,14 +27,6 @@ impl Puzzle {
         self.array = vec![Cell::Empty; self.row_clues.len() * self.column_clues.len()]
     }
 
-    /*pub fn insert_clues_row(&mut self, row: usize, clues: Vec<usize>) {
-        self.row_clues[row] = clues;
-    }
-
-    pub fn insert_clues_column(&mut self, column: usize, clues: Vec<usize>) {
-        self.column_clues[column] = clues;
-    }*/
-
     pub fn push_clues_row(&mut self, clues: Vec<usize>) {
         self.row_clues.push(clues);
         self.recalculate_size();
@@ -141,6 +133,10 @@ impl Puzzle {
 
     pub fn get_height(&self) -> usize {
         self.row_clues.len()
+    }
+
+    pub fn get_cell(&self, x: usize, y: usize) -> Cell {
+        self.array[self.get_pos(x, y)]
     }
 
     // verifies one row or column of rules
