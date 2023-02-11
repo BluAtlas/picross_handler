@@ -46,7 +46,7 @@ impl Puzzle {
     }
 
     // solves the current puzzle, returns true if puzzle was completable by the solver
-    pub fn solve(&mut self) -> bool {
+    fn solve(&mut self) -> bool {
         let height = self.row_clues.len();
         let width = self.column_clues.len();
         let mut change_made = true;
@@ -131,8 +131,16 @@ impl Puzzle {
         return self.verify();
     }
 
-    fn get_pos(&self, x: usize, y: usize) -> usize {
+    pub fn get_pos(&self, x: usize, y: usize) -> usize {
         y * self.column_clues.len() + x
+    }
+
+    pub fn get_width(&self) -> usize {
+        self.column_clues.len()
+    }
+
+    pub fn get_height(&self) -> usize {
+        self.row_clues.len()
     }
 
     // verifies one row or column of rules
