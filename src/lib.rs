@@ -139,6 +139,26 @@ impl Puzzle {
         self.array[self.get_pos(x, y)]
     }
 
+    pub fn get_longest_row_clue_len(&self) -> usize {
+        let mut longest = 0;
+        for i in &self.row_clues {
+            if i.len() > longest {
+                longest = i.len()
+            }
+        }
+        longest
+    }
+
+    pub fn get_longest_column_clue_len(&self) -> usize {
+        let mut longest = 0;
+        for i in &self.column_clues {
+            if i.len() > longest {
+                longest = i.len()
+            }
+        }
+        longest
+    }
+
     // verifies one row or column of rules
     fn verify_clues(&self, clues: &Vec<usize>, cells: &[Cell]) -> bool {
         let mut built_clues: Vec<usize> = vec![];
@@ -200,6 +220,7 @@ impl Puzzle {
         }
         true
     }
+
     // verifies if the puzzle is complete by comparing the array to the clues
     pub fn verify(&self) -> bool {
         self.verify_rows() && self.verify_columns()
