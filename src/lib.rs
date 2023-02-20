@@ -139,6 +139,10 @@ impl Puzzle {
         self.array[self.get_pos(x, y)]
     }
 
+    pub fn set_cell(&mut self, x: usize, y: usize, cell: Cell) {
+        self.array[y * self.column_clues.len() + x] = cell;
+    }
+
     pub fn get_longest_row_clue_len(&self) -> usize {
         let mut longest = 0;
         for i in &self.row_clues {
