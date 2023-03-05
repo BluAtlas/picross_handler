@@ -93,11 +93,14 @@ impl Puzzle {
 
         row_clues = row_clues.into_iter().rev().collect();
 
-        Ok(Puzzle {
+        let mut p = Puzzle {
             array: vec![],
             row_clues,
             column_clues,
-        })
+        };
+        p.recalculate_size();
+
+        Ok(p)
     }
 
     fn recalculate_size(&mut self) {
