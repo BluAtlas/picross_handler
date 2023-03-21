@@ -243,6 +243,31 @@ impl Puzzle {
         longest
     }
 
+    pub fn get_board_as_string(&self) -> String {
+        let mut result = String::from("");
+        for i in self.array.iter() {
+            match i {
+                Cell::Empty => result.push('0'),
+                Cell::Filled => result.push('1'),
+                Cell::Crossed => result.push('X'),
+            }
+        }
+        result
+    }
+
+    pub fn set_board_from_string(&mut self, string: &str) {
+        let mut new_array = vec![];
+        for i in string.chars() {
+            match i {
+                '0' => new_array.push(Cell::Empty),
+                '1' => new_array.push(Cell::Filled),
+                'X' => new_array.push(Cell::Crossed),
+                _ => {}
+            }
+        }
+        self.array = new_array;
+    }
+
     // verifies one row or column of rules
     fn verify_clues(&self, clues: &Vec<usize>, cells: &[Cell]) -> bool {
         let mut built_clues: Vec<usize> = vec![];
